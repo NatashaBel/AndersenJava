@@ -10,5 +10,4 @@ public class TicketService {
         Ticket Ticket2 = new Ticket("123A", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.001, price);
         Ticket Ticket3 = new Ticket("Theatre", (short) 124, new Timestamp(System.currentTimeMillis()));
     }
-
 }
