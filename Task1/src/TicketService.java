@@ -12,24 +12,24 @@ public class TicketService {
         tickets.add(new Ticket("111A", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
         tickets.add(new Ticket("112A", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
         tickets.add(new Ticket("113A", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("120B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("121B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("122B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("131C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("132C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("133C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
-        tickets.add(new Ticket("134C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.00, price));
+        tickets.add(new Ticket("120B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.B, (float) 5.00, price));
+        tickets.add(new Ticket("121B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.B, (float) 5.00, price));
+        tickets.add(new Ticket("122B", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.B, (float) 5.00, price));
+        tickets.add(new Ticket("131C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.C, (float) 5.00, price));
+        tickets.add(new Ticket("132C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.C, (float) 5.00, price));
+        tickets.add(new Ticket("133C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.C, (float) 5.00, price));
+        tickets.add(new Ticket("134C", "Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.C, (float) 5.00, price));
 
         for (int i = 0; i < tickets.size(); i++) {
             Ticket ticket = tickets.get(i);
             System.out.println(tickets.get(i));
         }
-        Ticket ticket = getID(tickets, "133C");
+        Ticket ticket = findByID(tickets, "133C");
         System.out.println(ticket);
     }
 
     // Method to return a ticket by ID
-    public static Ticket getID(ArrayList<Ticket> tickets, String ID) {
+    public static Ticket findByID(ArrayList<Ticket> tickets, String ID) {
         for (Ticket ticket : tickets) {
             if (ticket.getID().equals(ID)) {
                 return ticket; // Return the matching ticket
