@@ -24,6 +24,17 @@ public class TicketService {
             Ticket ticket = tickets.get(i);
             System.out.println(tickets.get(i));
         }
+        Ticket ticket = getID(tickets, "133C");
+        System.out.println(ticket);
+    }
 
+    // Method to return a ticket by ID
+    public static Ticket getID(ArrayList<Ticket> tickets, String ID) {
+        for (Ticket ticket : tickets) {
+            if (ticket.getID().equals(ID)) {
+                return ticket; // Return the matching ticket
+            }
+        }
+        return null; // Return null if no ticket is found
     }
 }
