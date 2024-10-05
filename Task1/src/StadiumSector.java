@@ -1,4 +1,4 @@
-enum StadiumSector {
+public enum StadiumSector {
     A,
     B,
     C
