@@ -1,8 +1,13 @@
+package model.ticket;
+
+import entity.AbstractEntity;
+import entity.Printable;
+import model.StadiumSector;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class Ticket {
-    private String ID;
+public class Ticket extends AbstractEntity implements Printable {
     private String concertHall;
     private short eventCode;
     private Timestamp timeStamp;
@@ -12,11 +17,9 @@ public class Ticket {
     private BigDecimal price;
 
     public Ticket() {
-
     }
 
-    public Ticket(String ID, String concertHall, short eventCode, Timestamp timeStamp, boolean isPromo, StadiumSector stadiumSector, float maxBackpackWeightInKg, BigDecimal price) {
-        setId(ID);
+    public Ticket(String concertHall, short eventCode, Timestamp timeStamp, boolean isPromo, StadiumSector stadiumSector, float maxBackpackWeightInKg, BigDecimal price) {
         setConcertHall(concertHall);
         setEventCode(eventCode);
         this.timeStamp = timeStamp;
@@ -30,10 +33,6 @@ public class Ticket {
         setConcertHall(concertHall);
         setEventCode(eventCode);
         this.timeStamp = timeStamp;
-    }
-
-    public String getID() {
-        return ID;
     }
 
     public String getConcertHall() {
@@ -64,18 +63,12 @@ public class Ticket {
         return price;
     }
 
-    // Instead of this.ID = ID; we added ID validation
-    private void setId(String ID) {
-        if (ID == null || ID.isEmpty()) {
-            throw new IllegalArgumentException("ID can not be null or empty");
-        }
-        if (ID.length() > 4) {
-            throw new IllegalArgumentException("ID length can not be more then 4 digits or chars");
-        }
-        if (!ID.matches("^[a-zA-Z0-9]+$")) {
-            throw new IllegalArgumentException("ID should contain digits or chars");
-        }
-        this.ID = ID;
+    public void setTimeStamp(Timestamp timeStamp){
+        this.timeStamp = timeStamp;
+    }
+
+    public void setStadiumSector(StadiumSector stadiumSector) {
+        this.stadiumSector = stadiumSector;
     }
 
     // Instead of this.concertHall = concertHall; we added concertHall validation
@@ -104,6 +97,15 @@ public class Ticket {
     }
 
     @Override
+    public void print() {
+        System.out.println("Class content: " + this);
+    }
+
+    public void share(){
+        System.out.println("Default share");
+    }
+
+    @Override
     public String toString() {
         return "ID='" + ID + '\'' +
                 ", concertHall='" + concertHall + '\'' +
@@ -115,4 +117,31 @@ public class Ticket {
                 ", price=" + price +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true; //compare with itself
+        if (o == null || getClass() != o.getClass()) //compare that input object is not null and that class in o and this.class are the same
+            return false;
+        Ticket ticket = (Ticket) o; //convert o to ticket class Ticket
+//        boolean IDEquals = (this.ID != null && this.ID.equals(ticket.ID)); //compare ID field
+//        boolean eventCodeEquals = (this.eventCode == ticket.eventCode); // compare eventCode field
+//        return IDEquals && eventCodeEquals;
+        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && ID.equals(ticket.ID) && concertHall.equals(ticket.concertHall) && timeStamp.equals(ticket.timeStamp) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = ID ==null ? 0 : ID.hashCode();
+        result = 31 * result + concertHall.hashCode();
+        result = 31 * result + eventCode;
+        result = 31 * result + timeStamp.hashCode();
+        result = 31 * result + Boolean.hashCode(isPromo);
+        result = 31 * result + stadiumSector.hashCode();
+        result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
+        result = 31 * result + price.hashCode();
+        return result;
+    }
 }
+
+
