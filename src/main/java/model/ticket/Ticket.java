@@ -1,13 +1,14 @@
 package model.ticket;
 
-import entity.AbstractEntity;
+import entity.BaseEntity;
 import entity.Printable;
+import entity.Shareable;
 import model.StadiumSector;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class Ticket extends AbstractEntity implements Printable {
+public class Ticket extends BaseEntity implements Printable, Shareable {
     private String concertHall;
     private short eventCode;
     private Timestamp timeStamp;
@@ -63,7 +64,7 @@ public class Ticket extends AbstractEntity implements Printable {
         return price;
     }
 
-    public void setTimeStamp(Timestamp timeStamp){
+    public void setTimeStamp(Timestamp timeStamp) {
         this.timeStamp = timeStamp;
     }
 
@@ -96,13 +97,27 @@ public class Ticket extends AbstractEntity implements Printable {
         this.eventCode = eventCode;
     }
 
+
     @Override
-    public void print() {
-        System.out.println("Class content: " + this);
+    public boolean equals(Object o) {
+        if (this == o) return true; //compare with itself
+        if (o == null || getClass() != o.getClass()) //compare that input object is not null and that class in o and this.class are the same
+            return false;
+        Ticket ticket = (Ticket) o; //convert o to ticket class Ticket
+        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && ID.equals(ticket.ID) && concertHall.equals(ticket.concertHall) && timeStamp.equals(ticket.timeStamp) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price);
     }
 
-    public void share(){
-        System.out.println("Default share");
+    @Override
+    public int hashCode() {
+        int result = ID == null ? 0 : ID.hashCode();
+        result = 31 * result + concertHall.hashCode();
+        result = 31 * result + eventCode;
+        result = 31 * result + timeStamp.hashCode();
+        result = 31 * result + Boolean.hashCode(isPromo);
+        result = 31 * result + stadiumSector.hashCode();
+        result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
+        result = 31 * result + price.hashCode();
+        return result;
     }
 
     @Override
@@ -119,29 +134,23 @@ public class Ticket extends AbstractEntity implements Printable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true; //compare with itself
-        if (o == null || getClass() != o.getClass()) //compare that input object is not null and that class in o and this.class are the same
-            return false;
-        Ticket ticket = (Ticket) o; //convert o to ticket class Ticket
-//        boolean IDEquals = (this.ID != null && this.ID.equals(ticket.ID)); //compare ID field
-//        boolean eventCodeEquals = (this.eventCode == ticket.eventCode); // compare eventCode field
-//        return IDEquals && eventCodeEquals;
-        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && ID.equals(ticket.ID) && concertHall.equals(ticket.concertHall) && timeStamp.equals(ticket.timeStamp) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price);
+    public void print() {
+        System.out.println("Class content: " + this);
     }
 
-    @Override
-    public int hashCode() {
-        int result = ID ==null ? 0 : ID.hashCode();
-        result = 31 * result + concertHall.hashCode();
-        result = 31 * result + eventCode;
-        result = 31 * result + timeStamp.hashCode();
-        result = 31 * result + Boolean.hashCode(isPromo);
-        result = 31 * result + stadiumSector.hashCode();
-        result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
-        result = 31 * result + price.hashCode();
-        return result;
+    public void share() {
+        System.out.println("Default share");
+    }
+
+    public void share(String phone) {
+        System.out.println("Default share by phone");
+    }
+
+    public void share(String phone, String email) {
+        System.out.println("Default share by phone and email");
     }
 }
+
+
 
 

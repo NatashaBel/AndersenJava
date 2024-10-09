@@ -4,7 +4,7 @@ import model.ticket.Ticket;
 
 public class Admin extends User {
 
-    public void checkTicket(Ticket ticket){
+    public void checkTicket(Ticket ticket) {
         if (ticket.getId() == null) {
             System.out.println("ID can not be null");
         } else {
@@ -13,7 +13,7 @@ public class Admin extends User {
     }
 
     @Override
-    public void printRole(){
+    public void printRole() {
         System.out.println("User Role: Admin");
     }
 }
