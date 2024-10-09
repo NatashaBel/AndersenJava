@@ -138,14 +138,17 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         System.out.println("Class content: " + this);
     }
 
+    @Override
     public void share() {
         System.out.println("Default share");
     }
 
+    @Override
     public void share(String phone) {
         System.out.println("Default share by phone");
     }
 
+    @Override
     public void share(String phone, String email) {
         System.out.println("Default share by phone and email");
     }
