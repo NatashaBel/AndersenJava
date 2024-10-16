@@ -32,14 +32,16 @@ public class CustomArrayList implements CustomList {
     }
 
     @Override
-    public void delete(int index) {
+    public boolean delete(int index) {
         if (index >= 0 && index <= myArray.length - 1) {
             for (int i = index; i < myArray.length - 1; i++) {
                 myArray[i] = myArray[i + 1];
             }
             myArray[this.index - 1] = null;
             this.index--;
+            return true;
         }
+        return false;
     }
 
     public Ticket[] getMyArray() {

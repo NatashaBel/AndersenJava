@@ -7,5 +7,5 @@ public interface CustomList {
 
     Ticket get(int index);
 
-    void delete(int index);
+    boolean delete(int index);
 }
