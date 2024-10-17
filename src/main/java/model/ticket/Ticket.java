@@ -109,14 +109,15 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
 
     @Override
     public int hashCode() {
-        int result = ID == null ? 0 : ID.hashCode();
-        result = 31 * result + concertHall.hashCode();
+        int result = ID != null ? ID.hashCode() : 0;
+        result = 31 * result + (concertHall != null ? concertHall.hashCode() : 0);
         result = 31 * result + eventCode;
-        result = 31 * result + timeStamp.hashCode();
+        result = 31 * result + (timeStamp != null ? timeStamp.hashCode() : 0);
         result = 31 * result + Boolean.hashCode(isPromo);
-        result = 31 * result + stadiumSector.hashCode();
+        result = 31 * result + (stadiumSector != null ? stadiumSector.hashCode() : 0);
         result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
-        result = 31 * result + price.hashCode();
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+
         return result;
     }
 

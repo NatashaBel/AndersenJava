@@ -3,6 +3,8 @@ package service;
 import entity.BaseEntity;
 import entity.Printable;
 import model.StadiumSector;
+import model.collection.list.CustomArrayList;
+import model.collection.set.CustomHashSet;
 import model.ticket.BusTicket;
 import model.ticket.CinemaTicket;
 import model.ticket.Ticket;
@@ -61,5 +63,26 @@ public class TicketService extends BaseEntity implements Printable {
 
         ticket2.equals(ticket1);
         ticket2.hashCode();
+
+        CustomHashSet mySet = new CustomHashSet();
+        Ticket mySetTicket = new Ticket();
+        System.out.println(mySet.put(new Ticket()));
+        mySet.iterate();
+        mySet.delete(mySetTicket);
+        System.out.println(mySet.check(mySetTicket));
+
+        CustomArrayList customArrayList = new CustomArrayList();
+        customArrayList.put(new Ticket());
+        customArrayList.put(new Ticket());
+        customArrayList.put(new Ticket());
+        customArrayList.put(new Ticket());
+        customArrayList.put(new Ticket());
+
+        System.out.println(customArrayList.delete(5));
+
+        for (int index = 0; index < customArrayList.getMyArray().length; index++) {
+            System.out.println(customArrayList.getMyArray()[index]);
+        }
+        System.out.println(customArrayList.get(0));
     }
 }
