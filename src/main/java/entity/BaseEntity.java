@@ -3,17 +3,17 @@ package entity;
 import java.util.UUID;
 
 public abstract class BaseEntity {
-    protected String ID;
+    protected UUID id;
 
-    public BaseEntity() {
-        ID = UUID.randomUUID().toString();
+    protected BaseEntity() {
+        id = UUID.randomUUID();
     }
 
-    public String getId() {
-        return ID;
+    public UUID getId() {
+        return id;
     }
 
-    public void setID(String ID) {
-        this.ID = ID;
+    public void setId(UUID id) {
+        this.id = id;
     }
 }

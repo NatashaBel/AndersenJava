@@ -4,36 +4,46 @@ import entity.BaseEntity;
 import entity.Printable;
 import entity.Shareable;
 import model.StadiumSector;
+import model.TicketType;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 public class Ticket extends BaseEntity implements Printable, Shareable {
     private String concertHall;
     private short eventCode;
-    private Timestamp timeStamp;
+    private Timestamp creationDate;
     private boolean isPromo;
     private StadiumSector stadiumSector;
     private float maxBackpackWeightInKg;
     private BigDecimal price;
+    private UUID userId;
+    private TicketType ticketType;
 
-    public Ticket() {
-    }
+    public Ticket() {}
 
-    public Ticket(String concertHall, short eventCode, Timestamp timeStamp, boolean isPromo, StadiumSector stadiumSector, float maxBackpackWeightInKg, BigDecimal price) {
+    public Ticket(String concertHall, short eventCode, Timestamp creationDate, boolean isPromo, StadiumSector stadiumSector, float maxBackpackWeightInKg, BigDecimal price) {
         setConcertHall(concertHall);
         setEventCode(eventCode);
-        this.timeStamp = timeStamp;
+        this.creationDate = creationDate;
         this.isPromo = isPromo;
         this.stadiumSector = stadiumSector;
         this.maxBackpackWeightInKg = maxBackpackWeightInKg;
         this.price = price;
     }
 
-    public Ticket(String concertHall, short eventCode, Timestamp timeStamp) {
+    public Ticket(String concertHall, short eventCode, Timestamp creationDate) {
         setConcertHall(concertHall);
         setEventCode(eventCode);
-        this.timeStamp = timeStamp;
+        this.creationDate = creationDate;
+    }
+
+    public Ticket(UUID id, UUID userId, TicketType ticketType,Timestamp creationDate){
+        this.id = id;
+        this.userId = userId;
+        this.ticketType = ticketType;
+        this.creationDate = creationDate;
     }
 
     public String getConcertHall() {
@@ -44,8 +54,8 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         return eventCode;
     }
 
-    public Timestamp getTimeStamp() {
-        return timeStamp;
+    public Timestamp getCreationDate() {
+        return creationDate;
     }
 
     public boolean getIsPromo() {
@@ -64,8 +74,16 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         return price;
     }
 
-    public void setTimeStamp(Timestamp timeStamp) {
-        this.timeStamp = timeStamp;
+    public UUID getUserId(){
+        return userId;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void setStadiumSector(StadiumSector stadiumSector) {
@@ -97,40 +115,42 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         this.eventCode = eventCode;
     }
 
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true; //compare with itself
-        if (o == null || getClass() != o.getClass()) //compare that input object is not null and that class in o and this.class are the same
-            return false;
-        Ticket ticket = (Ticket) o; //convert o to ticket class Ticket
-        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && ID.equals(ticket.ID) && concertHall.equals(ticket.concertHall) && timeStamp.equals(ticket.timeStamp) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price);
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Ticket ticket = (Ticket) o;
+        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && concertHall.equals(ticket.concertHall) && creationDate.equals(ticket.creationDate) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price) && userId.equals(ticket.userId) && ticketType == ticket.ticketType;
     }
 
     @Override
     public int hashCode() {
-        int result = ID != null ? ID.hashCode() : 0;
-        result = 31 * result + (concertHall != null ? concertHall.hashCode() : 0);
+        int result = concertHall.hashCode();
         result = 31 * result + eventCode;
-        result = 31 * result + (timeStamp != null ? timeStamp.hashCode() : 0);
+        result = 31 * result + creationDate.hashCode();
         result = 31 * result + Boolean.hashCode(isPromo);
-        result = 31 * result + (stadiumSector != null ? stadiumSector.hashCode() : 0);
+        result = 31 * result + stadiumSector.hashCode();
         result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
-        result = 31 * result + (price != null ? price.hashCode() : 0);
-
+        result = 31 * result + price.hashCode();
+        result = 31 * result + userId.hashCode();
+        result = 31 * result + ticketType.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return "ID='" + ID + '\'' +
-                ", concertHall='" + concertHall + '\'' +
+        return "Ticket{" +
+                "concertHall='" + concertHall + '\'' +
                 ", eventCode=" + eventCode +
-                ", timeStamp=" + timeStamp +
+                ", creationDate=" + creationDate +
                 ", isPromo=" + isPromo +
                 ", stadiumSector=" + stadiumSector +
                 ", maxBackpackWeightInKg=" + maxBackpackWeightInKg +
                 ", price=" + price +
+                ", userId=" + userId +
+                ", ticketType=" + ticketType +
+                ", ID=" + id +
                 '}';
     }
 
@@ -154,7 +174,3 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         System.out.println("Default share by phone and email");
     }
 }
-
-
-
-

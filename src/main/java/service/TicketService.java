@@ -1,88 +1,60 @@
 package service;
 
+import dao.TicketDaoImpl;
+import dao.UserDaoImpl;
 import entity.BaseEntity;
 import entity.Printable;
-import model.StadiumSector;
-import model.collection.list.CustomArrayList;
-import model.collection.set.CustomHashSet;
-import model.ticket.BusTicket;
-import model.ticket.CinemaTicket;
+import model.TicketType;
 import model.ticket.Ticket;
-import model.user.Admin;
-import model.user.Client;
 import model.user.User;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public class TicketService extends BaseEntity implements Printable {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
-        BigDecimal price = new BigDecimal("60.55");
-        Ticket ticket1 = new Ticket();
-        Ticket ticket2 = new Ticket("Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.001, price);
-        Ticket ticket3 = new Ticket("Theatre", (short) 124, new Timestamp(System.currentTimeMillis()));
+        String jdbcUrl = "jdbc:postgresql://localhost:5432/my_ticket_service_db";
+        String username = "postgres";
+        String password = "password";
+        Class.forName("org.postgresql.Driver");
+        Connection connection = DriverManager.getConnection(jdbcUrl, username, password);
 
-        BaseEntity ticket = new Ticket();
-        System.out.println(ticket.getId());
-        ticket.setID("563gdj");
+        TicketDaoImpl ticketDao = new TicketDaoImpl(connection);
+        UserDaoImpl userDao = new UserDaoImpl(connection);
 
-        Printable defaultPrint = new TicketService();
-        defaultPrint.print();
-        ticket1.print();
-        Printable fromClient = new Client(new Ticket());
-        fromClient.print();
+        Ticket ticket = new Ticket(UUID.fromString("0234dab7-b186-472c-8d07-420223ed9557"),
+                UUID.fromString("cb1565a0-68e2-48b6-a7d6-019d4935db43"), TicketType.DAY,
+                new Timestamp(System.currentTimeMillis()));
+        ticketDao.save(ticket);
 
-        ticket1.setStadiumSector(StadiumSector.B);
-        ticket2.setTimeStamp(new Timestamp(System.currentTimeMillis()));
-        ticket1.print();
-        ticket2.print();
+        System.out.println(ticketDao.getById(UUID.fromString("0234dab7-b186-472c-8d07-420223ed9557")));
+        System.out.println(ticketDao.getByUserId(UUID.fromString("cb1565a0-68e2-48b6-a7d6-019d4935db43")));
 
-        Ticket busTicket1 = new BusTicket();
-        BusTicket busTicket2 = new BusTicket();
-        Ticket cinemaTicket1 = new CinemaTicket();
-        CinemaTicket cinemaTicket2 = new CinemaTicket();
-
-        busTicket1.share(); //call the parent method .share().
-        busTicket2.share("+48 555 666 777"); //call the child method that overload the parent method
-        cinemaTicket1.share(); //call the parent method .share()
-        cinemaTicket2.share("+48 111 222 333", "testemail@gmail.com"); //call the child method that overload the parent method
-
-        User user = new User();
-        User clientUserAsUser = new Client(new Ticket());
-        Client clientUser = new Client(new Ticket());
-        User adminUserAsUser = new Admin();
-        Admin adminUser = new Admin();
-
-        user.printRole();
-        clientUserAsUser.printRole();
-        adminUserAsUser.printRole();
-        System.out.println("Get Ticket:" + " " + clientUser.getTicket());
-        adminUser.checkTicket(ticket2);
-
-        ticket2.equals(ticket1);
-        ticket2.hashCode();
-
-        CustomHashSet mySet = new CustomHashSet();
-        Ticket mySetTicket = new Ticket();
-        System.out.println(mySet.put(new Ticket()));
-        mySet.iterate();
-        mySet.delete(mySetTicket);
-        System.out.println(mySet.check(mySetTicket));
-
-        CustomArrayList customArrayList = new CustomArrayList();
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-
-        System.out.println(customArrayList.delete(5));
-
-        for (int index = 0; index < customArrayList.getMyArray().length; index++) {
-            System.out.println(customArrayList.getMyArray()[index]);
+        System.out.println(ticketDao.update(TicketType.MONTH, UUID.fromString("1974db25-fc0e-4322-9a01-c98eabc49a28")));
+        UUID userUuid = UUID.fromString("4742dab7-b186-472c-8d07-420223ed9551");
+        ArrayList<Ticket> ticketCollection = ticketDao.getByUserId(userUuid);
+        System.out.println(ticketCollection);
+        if (!ticketCollection.isEmpty()){
+            for (Ticket ticketColl : ticketCollection){
+                ticketDao.delete(ticketColl.getId());
+            }
         }
-        System.out.println(customArrayList.get(0));
+
+        User user = new User(UUID.fromString("8742dab7-b456-472c-8d07-420223ed9551"), "Kitt", new Timestamp(System.currentTimeMillis()));
+        userDao.save(user);
+
+        User user1 = userDao.get(UUID.fromString("4742dab7-b186-472c-8d07-420223ed9551"));
+        System.out.println(user1);
+
+        User user2 = new User(UUID.fromString("cb1565a0-68e2-48b6-a7d6-019d4935db43"),"Nima", new Timestamp(System.currentTimeMillis()));
+        userDao.update(user2);
+        System.out.println(user2);
+
+        System.out.println(userDao.delete(UUID.fromString("8742dab7-b456-472c-8d07-420223ed9551")));
+
+        connection.close();
     }
 }
