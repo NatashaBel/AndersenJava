@@ -14,7 +14,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean save(User user) {
-        String sqlCommand = "INSERT INTO public.\"user_data\" (id, name, creation_date) VALUES (?, ?, ?)";
+        String sqlCommand = "INSERT INTO user_data (id, name, creation_date) VALUES (?, ?, ?)";
         try (Connection connection = ConnectionConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
             statement.setObject(1, user.getId());
@@ -28,7 +28,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User get(UUID id) {
-        String sqlCommand = "SELECT * FROM public.\"user_data\" WHERE id = ?";
+        String sqlCommand = "SELECT * FROM user_data WHERE id = ?";
         try (Connection connection = ConnectionConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
             statement.setObject(1, id);
@@ -37,7 +37,9 @@ public class UserDaoImpl implements UserDao {
                     UUID columnId = (UUID) resultSet.getObject("id");
                     String columnName = resultSet.getString("name");
                     Timestamp columnCreationDate = resultSet.getTimestamp("creation_date");
-                    return new User(columnId, columnName, columnCreationDate);
+                    User user = new User(columnName, columnCreationDate);
+                    user.setId(columnId);
+                    return user;
                 }
             }
         } catch (SQLException | ClassNotFoundException e) {
@@ -47,7 +49,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public boolean update(User user) {
-        String sqlCommand = "UPDATE public.\"user_data\" SET name = ?, creation_date = ? WHERE id = ?";
+        String sqlCommand = "UPDATE user_data SET name = ?, creation_date = ? WHERE id = ?";
         try (Connection connection = ConnectionConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
             statement.setString(1, user.getName());
@@ -60,7 +62,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public boolean delete(UUID id) {
-        String sqlCommand = "DELETE FROM public.\"user_data\" WHERE id = ?";
+        String sqlCommand = "DELETE FROM user_data WHERE id = ?";
         try (Connection connection = ConnectionConfig.getConnection();
              PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
             statement.setObject(1, id);

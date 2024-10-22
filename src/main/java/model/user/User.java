@@ -4,7 +4,6 @@ import entity.BaseEntity;
 import entity.Printable;
 
 import java.sql.Timestamp;
-import java.util.UUID;
 
 public class User extends BaseEntity implements Printable {
     private String name;
@@ -14,8 +13,7 @@ public class User extends BaseEntity implements Printable {
 
     }
 
-    public User(UUID id, String name, Timestamp creationDate) {
-        this.id = id;
+    public User(String name, Timestamp creationDate) {
         this.name = name;
         this.creationDate = creationDate;
     }
@@ -26,6 +24,10 @@ public class User extends BaseEntity implements Printable {
 
     public Timestamp getCreationDate() {
         return creationDate;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     public void printRole() {
