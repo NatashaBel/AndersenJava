@@ -39,8 +39,7 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         this.creationDate = creationDate;
     }
 
-    public Ticket(UUID id, UUID userId, TicketType ticketType,Timestamp creationDate){
-        this.id = id;
+    public Ticket(UUID userId, TicketType ticketType,Timestamp creationDate){
         this.userId = userId;
         this.ticketType = ticketType;
         this.creationDate = creationDate;
