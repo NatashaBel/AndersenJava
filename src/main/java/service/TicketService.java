@@ -1,88 +1,50 @@
 package service;
 
+import dao.TicketDaoImpl;
+import dao.UserDaoImpl;
 import entity.BaseEntity;
 import entity.Printable;
-import model.StadiumSector;
-import model.collection.list.CustomArrayList;
-import model.collection.set.CustomHashSet;
-import model.ticket.BusTicket;
-import model.ticket.CinemaTicket;
+import model.TicketType;
 import model.ticket.Ticket;
-import model.user.Admin;
-import model.user.Client;
 import model.user.User;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 public class TicketService extends BaseEntity implements Printable {
 
     public static void main(String[] args) {
 
-        BigDecimal price = new BigDecimal("60.55");
-        Ticket ticket1 = new Ticket();
-        Ticket ticket2 = new Ticket("Opera", (short) 123, new Timestamp(System.currentTimeMillis()), false, StadiumSector.A, (float) 5.001, price);
-        Ticket ticket3 = new Ticket("Theatre", (short) 124, new Timestamp(System.currentTimeMillis()));
+        TicketDaoImpl ticketDao = new TicketDaoImpl();
+        UserDaoImpl userDao = new UserDaoImpl();
 
-        BaseEntity ticket = new Ticket();
-        System.out.println(ticket.getId());
-        ticket.setID("563gdj");
+        User user = new User("Kira", new Timestamp(System.currentTimeMillis()));
+        userDao.save(user);
+        user = userDao.get(user.getId());
+        System.out.println(user);
 
-        Printable defaultPrint = new TicketService();
-        defaultPrint.print();
-        ticket1.print();
-        Printable fromClient = new Client(new Ticket());
-        fromClient.print();
+        user.setName("Lisa");
 
-        ticket1.setStadiumSector(StadiumSector.B);
-        ticket2.setTimeStamp(new Timestamp(System.currentTimeMillis()));
-        ticket1.print();
-        ticket2.print();
+        userDao.update(user);
+        user = userDao.get(user.getId());
+        System.out.println(user);
 
-        Ticket busTicket1 = new BusTicket();
-        BusTicket busTicket2 = new BusTicket();
-        Ticket cinemaTicket1 = new CinemaTicket();
-        CinemaTicket cinemaTicket2 = new CinemaTicket();
 
-        busTicket1.share(); //call the parent method .share().
-        busTicket2.share("+48 555 666 777"); //call the child method that overload the parent method
-        cinemaTicket1.share(); //call the parent method .share()
-        cinemaTicket2.share("+48 111 222 333", "testemail@gmail.com"); //call the child method that overload the parent method
+        Ticket ticket = new Ticket(user.getId(), TicketType.DAY, new Timestamp(System.currentTimeMillis()));
+        ticketDao.save(ticket);
 
-        User user = new User();
-        User clientUserAsUser = new Client(new Ticket());
-        Client clientUser = new Client(new Ticket());
-        User adminUserAsUser = new Admin();
-        Admin adminUser = new Admin();
+        System.out.println(ticketDao.getById(ticket.getId()));
+        System.out.println(ticketDao.getByUserId(user.getId()));
 
-        user.printRole();
-        clientUserAsUser.printRole();
-        adminUserAsUser.printRole();
-        System.out.println("Get Ticket:" + " " + clientUser.getTicket());
-        adminUser.checkTicket(ticket2);
+        System.out.println(ticketDao.update(TicketType.MONTH, ticket.getId()));
 
-        ticket2.equals(ticket1);
-        ticket2.hashCode();
-
-        CustomHashSet mySet = new CustomHashSet();
-        Ticket mySetTicket = new Ticket();
-        System.out.println(mySet.put(new Ticket()));
-        mySet.iterate();
-        mySet.delete(mySetTicket);
-        System.out.println(mySet.check(mySetTicket));
-
-        CustomArrayList customArrayList = new CustomArrayList();
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-        customArrayList.put(new Ticket());
-
-        System.out.println(customArrayList.delete(5));
-
-        for (int index = 0; index < customArrayList.getMyArray().length; index++) {
-            System.out.println(customArrayList.getMyArray()[index]);
+        ArrayList<Ticket> ticketCollection = ticketDao.getByUserId(user.getId());
+        System.out.println(ticketCollection);
+        if (!ticketCollection.isEmpty()) {
+            for (Ticket ticketColl : ticketCollection) {
+                ticketDao.delete(ticketColl.getId());
+            }
         }
-        System.out.println(customArrayList.get(0));
+        System.out.println(userDao.delete(user.getId()));
     }
 }
