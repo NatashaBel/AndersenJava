@@ -1,74 +1,74 @@
 package dao;
 
-import config.ConnectionConfig;
+import model.TicketType;
 import model.user.User;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 public class UserDaoImpl implements UserDao {
 
     @Override
-    public boolean save(User user) {
-        String sqlCommand = "INSERT INTO user_data (id, name, creation_date) VALUES (?, ?, ?)";
-        try (Connection connection = ConnectionConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
-            statement.setObject(1, user.getId());
-            statement.setString(2, user.getName());
-            statement.setTimestamp(3, user.getCreationDate());
-            return statement.executeUpdate() == 1;
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public void save(User user) {
+        Session session = SessionFactoryProvider.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(user);
+        transaction.commit();
+        session.close();
     }
 
     @Override
     public User get(UUID id) {
-        String sqlCommand = "SELECT * FROM user_data WHERE id = ?";
-        try (Connection connection = ConnectionConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
-            statement.setObject(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    UUID columnId = (UUID) resultSet.getObject("id");
-                    String columnName = resultSet.getString("name");
-                    Timestamp columnCreationDate = resultSet.getTimestamp("creation_date");
-                    User user = new User(columnName, columnCreationDate);
-                    user.setId(columnId);
-                    return user;
-                }
+        try (Session session = SessionFactoryProvider.getSessionFactory().openSession()) {
+            Transaction transaction = session.beginTransaction();
+            User user = session.get(User.class, id);
+            transaction.commit();
+            return user;
+        }
+    }
+
+    @Override
+    public void update(User user) {
+        Session session = SessionFactoryProvider.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.merge(user);
+        transaction.commit();
+        session.close();
+    }
+
+    @Override
+    public void updateUserAndTickets(User user) {
+        Session session = SessionFactoryProvider.getSessionFactory().openSession();
+        Transaction transaction = null;
+        try {
+            transaction = session.beginTransaction();
+            if (user == null) {
+                throw new RuntimeException("User not found!");
             }
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e);
+            user.setName("Bob");
+            if (!user.getTickets().isEmpty()) {
+                user.getTickets().getFirst().setTicketType(TicketType.YEAR);
+            } else {
+                System.out.println("User does not have tickets");
+            }
+            session.saveOrUpdate(user);
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return null;
     }
 
-    public boolean update(User user) {
-        String sqlCommand = "UPDATE user_data SET name = ?, creation_date = ? WHERE id = ?";
-        try (Connection connection = ConnectionConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
-            statement.setString(1, user.getName());
-            statement.setTimestamp(2, user.getCreationDate());
-            statement.setObject(3, user.getId());
-            return statement.executeUpdate() == 1;
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public boolean delete(UUID id) {
-        String sqlCommand = "DELETE FROM user_data WHERE id = ?";
-        try (Connection connection = ConnectionConfig.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sqlCommand)) {
-            statement.setObject(1, id);
-            return statement.executeUpdate() == 1;
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+    public void delete(User user) {
+        Session session = SessionFactoryProvider.getSessionFactory().openSession();
+        Transaction transaction = session.beginTransaction();
+        session.remove(user);
+        transaction.commit();
+        session.close();
     }
 }

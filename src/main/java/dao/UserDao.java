@@ -1,15 +1,18 @@
 package dao;
 
+
 import model.user.User;
 
 import java.util.UUID;
 
 public interface UserDao {
-    boolean save(User user);
+    void save(User user);
 
     User get(UUID id);
 
-    boolean update(User user);
+    void update(User user);
 
-    boolean delete(UUID id);
+    void updateUserAndTickets(User user);
+
+    void delete(User user);
 }
