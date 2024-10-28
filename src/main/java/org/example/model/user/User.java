@@ -1,7 +1,7 @@
-package model.user;
+package org.example.model.user;
 
-import entity.BaseEntity;
-import entity.Printable;
+import org.example.entity.BaseEntity;
+import org.example.entity.Printable;
 
 import java.sql.Timestamp;
 

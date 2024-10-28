@@ -1,12 +1,12 @@
-package dao;
+package org.example.dao;
 
-import model.TicketType;
-import model.ticket.Ticket;
+import org.example.model.TicketType;
+import org.example.model.ticket.Ticket;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-public interface TicketDao {
+public interface TicketDAO {
     boolean save(Ticket ticket);
 
     Ticket getById(UUID id);

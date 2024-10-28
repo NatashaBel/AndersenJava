@@ -1,6 +1,6 @@
-package model.user;
+package org.example.model.user;
 
-import model.ticket.Ticket;
+import org.example.model.ticket.Ticket;
 
 public class Client extends User {
     Ticket ticket;

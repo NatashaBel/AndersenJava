@@ -1,4 +1,4 @@
-package model.ticket;
+package org.example.model.ticket;
 
 public class BusTicket extends Ticket {
 

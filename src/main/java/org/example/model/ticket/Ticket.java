@@ -1,10 +1,10 @@
-package model.ticket;
+package org.example.model.ticket;
 
-import entity.BaseEntity;
-import entity.Printable;
-import entity.Shareable;
-import model.StadiumSector;
-import model.TicketType;
+import org.example.entity.BaseEntity;
+import org.example.entity.Printable;
+import org.example.entity.Shareable;
+import org.example.model.StadiumSector;
+import org.example.model.TicketType;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;

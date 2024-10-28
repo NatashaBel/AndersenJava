@@ -1,10 +1,10 @@
-package dao;
+package org.example.dao;
 
-import model.user.User;
+import org.example.model.user.User;
 
 import java.util.UUID;
 
-public interface UserDao {
+public interface UserDAO {
     boolean save(User user);
 
     User get(UUID id);

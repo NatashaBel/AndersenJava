@@ -1,7 +1,7 @@
-package model.collection.list;
+package org.example.model.collection.list;
 
-import entity.CustomList;
-import model.ticket.Ticket;
+import org.example.entity.CustomList;
+import org.example.model.ticket.Ticket;
 
 import java.util.Arrays;
 

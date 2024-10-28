@@ -1,7 +1,7 @@
-package model.collection.set;
+package org.example.model.collection.set;
 
-import entity.CustomSet;
-import model.ticket.Ticket;
+import org.example.entity.CustomSet;
+import org.example.model.ticket.Ticket;
 
 import java.util.HashMap;
 

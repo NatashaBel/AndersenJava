@@ -1,6 +1,6 @@
-package entity;
+package org.example.entity;
 
-import model.ticket.Ticket;
+import org.example.model.ticket.Ticket;
 
 public interface CustomList {
     void put(Ticket ticket);
