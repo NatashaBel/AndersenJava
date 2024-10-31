@@ -2,24 +2,31 @@ package org.example.model.user;
 
 import org.example.entity.BaseEntity;
 import org.example.entity.Printable;
+import org.example.model.UserStatus;
 
 import java.sql.Timestamp;
 
 public class User extends BaseEntity implements Printable {
     private String name;
+    private UserStatus userStatus;
     private Timestamp creationDate;
 
     public User() {
 
     }
 
-    public User(String name, Timestamp creationDate) {
+    public User(String name, UserStatus userStatus, Timestamp creationDate) {
         this.name = name;
+        this.userStatus = userStatus;
         this.creationDate = creationDate;
     }
 
     public String getName() {
         return name;
+    }
+
+    public UserStatus getUserStatus() {
+        return userStatus;
     }
 
     public Timestamp getCreationDate() {
@@ -28,6 +35,10 @@ public class User extends BaseEntity implements Printable {
 
     public void setName(String name){
         this.name = name;
+    }
+
+    public void setUserStatus(UserStatus userStatus) {
+        this.userStatus = userStatus;
     }
 
     public void printRole() {
@@ -42,9 +53,10 @@ public class User extends BaseEntity implements Printable {
     @Override
     public String toString() {
         return "User{" +
-                "columnId='" + id + '\'' +
-                ", columnName='" + name + '\'' +
-                ", columnCreationDate=" + creationDate +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", userStatus=" + userStatus +
+                ", creationDate=" + creationDate +
                 '}';
     }
 }
