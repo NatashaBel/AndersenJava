@@ -1,25 +1,49 @@
 package org.example.model.ticket;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import org.example.entity.BaseEntity;
 import org.example.entity.Printable;
 import org.example.entity.Shareable;
 import org.example.model.StadiumSector;
 import org.example.model.TicketType;
+import org.example.model.user.User;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.UUID;
 
+@Entity
+@Table(name = "ticket_data")
 public class Ticket extends BaseEntity implements Printable, Shareable {
-    private String concertHall;
-    private short eventCode;
-    private Timestamp creationDate;
-    private boolean isPromo;
-    private StadiumSector stadiumSector;
-    private float maxBackpackWeightInKg;
-    private BigDecimal price;
-    private UUID userId;
+    @ManyToOne
+    @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
+    private User user;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "ticket_type", nullable = false)
     private TicketType ticketType;
+    @Column(name = "creation_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp creationDate;
+    @Transient
+    private String concertHall;
+    @Transient
+    private short eventCode;
+    @Transient
+    private boolean isPromo;
+    @Transient
+    private StadiumSector stadiumSector;
+    @Transient
+    private float maxBackpackWeightInKg;
+    @Transient
+    private BigDecimal price;
 
     public Ticket() {}
 
@@ -39,10 +63,22 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         this.creationDate = creationDate;
     }
 
-    public Ticket(UUID userId, TicketType ticketType,Timestamp creationDate){
-        this.userId = userId;
+    public Ticket(User user, TicketType ticketType,Timestamp creationDate){
+        this.user = user;
         this.ticketType = ticketType;
         this.creationDate = creationDate;
+    }
+
+    public User getUser(){
+        return user;
+    }
+
+    public TicketType getTicketType() {
+        return ticketType;
+    }
+
+    public Timestamp getCreationDate() {
+        return creationDate;
     }
 
     public String getConcertHall() {
@@ -51,10 +87,6 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
 
     public short getEventCode() {
         return eventCode;
-    }
-
-    public Timestamp getCreationDate() {
-        return creationDate;
     }
 
     public boolean getIsPromo() {
@@ -73,12 +105,12 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         return price;
     }
 
-    public UUID getUserId(){
-        return userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public TicketType getTicketType() {
-        return ticketType;
+    public void setTicketType(TicketType ticketType) {
+        this.ticketType = ticketType;
     }
 
     public void setCreationDate(Timestamp creationDate) {
@@ -120,7 +152,10 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Ticket ticket = (Ticket) o;
-        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg, ticket.maxBackpackWeightInKg) == 0 && concertHall.equals(ticket.concertHall) && creationDate.equals(ticket.creationDate) && stadiumSector == ticket.stadiumSector && price.equals(ticket.price) && userId.equals(ticket.userId) && ticketType == ticket.ticketType;
+        return eventCode == ticket.eventCode && isPromo == ticket.isPromo && Float.compare(maxBackpackWeightInKg,
+                ticket.maxBackpackWeightInKg) == 0 && concertHall.equals(ticket.concertHall) &&
+                creationDate.equals(ticket.creationDate) && stadiumSector == ticket.stadiumSector &&
+                price.equals(ticket.price) && user.equals(ticket.user) && ticketType == ticket.ticketType;
     }
 
     @Override
@@ -132,7 +167,7 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         result = 31 * result + stadiumSector.hashCode();
         result = 31 * result + Float.hashCode(maxBackpackWeightInKg);
         result = 31 * result + price.hashCode();
-        result = 31 * result + userId.hashCode();
+        result = 31 * result + user.hashCode();
         result = 31 * result + ticketType.hashCode();
         return result;
     }
@@ -140,16 +175,15 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
     @Override
     public String toString() {
         return "Ticket{" +
-                "concertHall='" + concertHall + '\'' +
-                ", eventCode=" + eventCode +
+                ", ticketType=" + ticketType +
                 ", creationDate=" + creationDate +
+                ", concertHall='" + concertHall + '\'' +
+                ", eventCode=" + eventCode +
                 ", isPromo=" + isPromo +
                 ", stadiumSector=" + stadiumSector +
                 ", maxBackpackWeightInKg=" + maxBackpackWeightInKg +
                 ", price=" + price +
-                ", userId=" + userId +
-                ", ticketType=" + ticketType +
-                ", ID=" + id +
+                ", id=" + id +
                 '}';
     }
 
