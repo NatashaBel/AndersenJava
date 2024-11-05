@@ -14,7 +14,6 @@ public abstract class BaseEntity {
     protected UUID id;
 
     protected BaseEntity() {
-//        id = UUID.randomUUID();
     }
 
     public UUID getId() {

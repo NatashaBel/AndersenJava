@@ -21,6 +21,9 @@ import java.util.UUID;
 public class TicketController {
 
     @Autowired
+    private String thisIsMyFirstConditionalBean;
+
+    @Autowired
     private TicketService ticketService;
 
     @PostMapping("/")
