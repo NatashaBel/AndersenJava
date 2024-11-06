@@ -2,7 +2,6 @@ package org.example.model.user;
 
 import jakarta.persistence.*;
 import org.example.entity.BaseEntity;
-import org.example.entity.Printable;
 import org.example.model.UserStatus;
 import org.example.model.ticket.Ticket;
 
@@ -11,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_data")
-public class User extends BaseEntity implements Printable {
+public class User extends BaseEntity {
     @Column(name = "name", nullable = false)
     private String name;
     @Enumerated(EnumType.STRING)
@@ -55,15 +54,6 @@ public class User extends BaseEntity implements Printable {
 
     public void setCreationDate(Timestamp creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public void printRole() {
-        System.out.println("User Role: User");
-    }
-
-    @Override
-    public void print() {
-        System.out.println("Class content: " + this);
     }
 
     @Override

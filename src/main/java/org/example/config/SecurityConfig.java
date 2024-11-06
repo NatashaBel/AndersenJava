@@ -19,8 +19,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/tickets/**").hasRole("ADMIN") // Secure the specific endpoint
-                        .anyRequest().permitAll() // Allow all other requests without authentication
+                        .requestMatchers("/api/tickets/**").hasRole("ADMIN")
+                        .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults());
         return http.build();

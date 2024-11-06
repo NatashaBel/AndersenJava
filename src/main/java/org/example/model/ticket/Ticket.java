@@ -11,8 +11,6 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
 import org.example.entity.BaseEntity;
-import org.example.entity.Printable;
-import org.example.entity.Shareable;
 import org.example.model.StadiumSector;
 import org.example.model.TicketType;
 import org.example.model.user.User;
@@ -22,7 +20,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ticket_data")
-public class Ticket extends BaseEntity implements Printable, Shareable {
+public class Ticket extends BaseEntity {
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName = "id", nullable = false)
     private User user;
@@ -121,7 +119,6 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         this.stadiumSector = stadiumSector;
     }
 
-    // Instead of this.concertHall = concertHall; we added concertHall validation
     private void setConcertHall(String concertHall) {
         if (concertHall == null || concertHall.isEmpty()) {
             throw new IllegalArgumentException("ID can not be null or empty");
@@ -135,7 +132,6 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
         this.concertHall = concertHall;
     }
 
-    // Instead of this.eventCode = eventCode; we added eventCode validation
     private void setEventCode(short eventCode) {
         if (eventCode == 0) {
             throw new IllegalArgumentException("ID can not be 0");
@@ -185,25 +181,5 @@ public class Ticket extends BaseEntity implements Printable, Shareable {
                 ", price=" + price +
                 ", id=" + id +
                 '}';
-    }
-
-    @Override
-    public void print() {
-        System.out.println("Class content: " + this);
-    }
-
-    @Override
-    public void share() {
-        System.out.println("Default share");
-    }
-
-    @Override
-    public void share(String phone) {
-        System.out.println("Default share by phone");
-    }
-
-    @Override
-    public void share(String phone, String email) {
-        System.out.println("Default share by phone and email");
     }
 }

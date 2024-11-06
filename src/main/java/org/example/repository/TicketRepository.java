@@ -14,11 +14,10 @@ import java.util.UUID;
 
 @Repository
 public interface TicketRepository extends CrudRepository<Ticket, UUID> {
-    //    @Query("SELECT t FROM Ticket t WHERE t.user =:userId")
-    List<Ticket> findByUserId(UUID userId); // Custom method to find tickets by user ID
+    List<Ticket> findByUserId(UUID userId);
 
     @Modifying
     @Transactional
     @Query("UPDATE Ticket t SET t.ticketType = :ticketType WHERE t.id = :id")
-    void updateTicketTypeById(@Param("ticketType") TicketType ticketType, @Param("id") UUID id); // Custom query method to find tickets by type
+    void updateTicketTypeById(@Param("ticketType") TicketType ticketType, @Param("id") UUID id);
 }
