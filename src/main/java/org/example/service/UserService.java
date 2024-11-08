@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -23,14 +22,17 @@ public class UserService {
     @Value("${app.user-update-create-ticket.enabled}")
     private boolean userUpdateCreateTicketEnabled;
 
+    @Transactional
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-    public Optional<User> getUserById(UUID id) {
-        return userRepository.findById(id);
+    public User getUserById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
 
+    @Transactional
     public void updateUserStatusById(UUID id, UserStatus userStatus) {
         userRepository.updateUserStatusById(userStatus, id);
     }
@@ -45,6 +47,7 @@ public class UserService {
         ticketRepository.save(ticket);
     }
 
+    @Transactional
     public void deleteUser(UUID id) {
         userRepository.deleteById(id);
     }

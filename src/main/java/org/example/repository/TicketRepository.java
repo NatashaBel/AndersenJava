@@ -1,6 +1,5 @@
 package org.example.repository;
 
-import jakarta.transaction.Transactional;
 import org.example.model.TicketType;
 import org.example.model.ticket.Ticket;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,7 +16,6 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
     List<Ticket> findByUserId(UUID userId);
 
     @Modifying
-    @Transactional
     @Query("UPDATE Ticket t SET t.ticketType = :ticketType WHERE t.id = :id")
     void updateTicketTypeById(@Param("ticketType") TicketType ticketType, @Param("id") UUID id);
 }

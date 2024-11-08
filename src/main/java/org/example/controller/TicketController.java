@@ -26,23 +26,22 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @PostMapping("/")
+    @PostMapping
     public Ticket createTicket(@RequestBody Ticket ticket) {
         return ticketService.saveTicket(ticket);
     }
 
     @GetMapping("/{id}")
     public Ticket getTicketById(@PathVariable UUID id) {
-        return ticketService.getTicket(id)
-                .orElseThrow(() -> new IllegalArgumentException("Ticket not found with id: " + id));
+        return ticketService.getTicket(id);
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public List<Ticket> getTicketsByUserId(@PathVariable UUID userId) {
         return ticketService.getTicketByUserId(userId);
     }
 
-    @PutMapping("/{id}/type")
+    @PutMapping("/{id}/update-type")
     public void updateTicketType(@PathVariable UUID id, @RequestBody TicketType ticketType) {
         ticketService.updateTicketType(id, ticketType);
     }

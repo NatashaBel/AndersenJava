@@ -23,6 +23,8 @@ public class SecurityConfig {
                         .anyRequest().permitAll()
                 )
                 .httpBasic(Customizer.withDefaults());
+        http
+                .csrf(csrf -> csrf.disable());
         return http.build();
     }
 
