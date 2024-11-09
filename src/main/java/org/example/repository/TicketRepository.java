@@ -17,5 +17,5 @@ public interface TicketRepository extends CrudRepository<Ticket, UUID> {
 
     @Modifying
     @Query("UPDATE Ticket t SET t.ticketType = :ticketType WHERE t.id = :id")
-    void updateTicketTypeById(@Param("ticketType") TicketType ticketType, @Param("id") UUID id);
+    int updateTicketTypeById(@Param("id") UUID id, @Param("ticketType") TicketType ticketType);
 }

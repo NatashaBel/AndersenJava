@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import org.example.repository.TicketRepository;
 import org.example.model.TicketType;
 import org.example.model.ticket.Ticket;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,12 +11,15 @@ import java.util.UUID;
 
 @Service
 public class TicketService {
-    @Autowired
     private TicketRepository ticketRepository;
+
+    public TicketService(TicketRepository ticketRepository) {
+        this.ticketRepository = ticketRepository;
+    }
 
     @Transactional
     public Ticket saveTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
+    return ticketRepository.save(ticket);
     }
 
     public Ticket getTicket(UUID id) {
@@ -30,8 +32,8 @@ public class TicketService {
     }
 
     @Transactional
-    public void updateTicketType(UUID id, TicketType ticketType) {
-        ticketRepository.updateTicketTypeById(ticketType, id);
+    public int  updateTicketType(UUID id, TicketType ticketType) {
+        return ticketRepository.updateTicketTypeById(id, ticketType);
     }
 
     @Transactional
