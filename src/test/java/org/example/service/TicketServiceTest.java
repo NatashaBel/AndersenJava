@@ -24,10 +24,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 @ExtendWith(MockitoExtension.class)
 class TicketServiceTest {
 
-  @Mock
-  private TicketRepository ticketRepository;
-  @InjectMocks
-  private TicketService ticketService;
+  @Mock private TicketRepository ticketRepository;
+  @InjectMocks private TicketService ticketService;
 
   User user;
   Ticket testTicket;

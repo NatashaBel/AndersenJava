@@ -15,33 +15,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/tickets/**").hasRole("ADMIN")
-                        .anyRequest().permitAll()
-                )
-                .httpBasic(Customizer.withDefaults());
-        http
-                .csrf(csrf -> csrf.disable());
-        return http.build();
-    }
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http.authorizeHttpRequests(
+            authorize ->
+                authorize
+                    .requestMatchers("/api/tickets/**")
+                    .hasRole("ADMIN")
+                    .anyRequest()
+                    .permitAll())
+        .httpBasic(Customizer.withDefaults());
+    http.csrf(csrf -> csrf.disable());
+    return http.build();
+  }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        User.UserBuilder userBuilder = User.withDefaultPasswordEncoder();
-        UserDetails user = userBuilder
-                .username("user")
-                .password("password")
-                .roles("ADMIN")
-                .build();
-        UserDetails user1 = userBuilder
-                .username("user1")
-                .password("password")
-                .roles("USER")
-                .build();
+  @Bean
+  public UserDetailsService userDetailsService() {
+    User.UserBuilder userBuilder = User.withDefaultPasswordEncoder();
+    UserDetails user = userBuilder.username("user").password("password").roles("ADMIN").build();
+    UserDetails user1 = userBuilder.username("user1").password("password").roles("USER").build();
 
-        return new InMemoryUserDetailsManager(user, user1);
-    }
+    return new InMemoryUserDetailsManager(user, user1);
+  }
 }
