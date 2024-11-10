@@ -1,15 +1,26 @@
 package org.example.model.user;
 
+import jakarta.persistence.*;
 import org.example.entity.BaseEntity;
-import org.example.entity.Printable;
 import org.example.model.UserStatus;
+import org.example.model.ticket.Ticket;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-public class User extends BaseEntity implements Printable {
+@Entity
+@Table(name = "user_data")
+public class User extends BaseEntity {
+    @Column(name = "name", nullable = false)
     private String name;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_status", nullable = false)
     private UserStatus userStatus;
+    @Column(name = "creation_date", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp creationDate;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Ticket> tickets;
 
     public User() {
 
@@ -41,22 +52,18 @@ public class User extends BaseEntity implements Printable {
         this.userStatus = userStatus;
     }
 
-    public void printRole() {
-        System.out.println("User Role: User");
-    }
-
-    @Override
-    public void print() {
-        System.out.println("Class content: " + this);
+    public void setCreationDate(Timestamp creationDate) {
+        this.creationDate = creationDate;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", userStatus=" + userStatus +
                 ", creationDate=" + creationDate +
+                ", tickets=" + tickets +
+                ", id=" + id +
                 '}';
     }
 }
