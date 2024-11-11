@@ -27,8 +27,8 @@ class TicketServiceTest {
   @Mock private TicketRepository ticketRepository;
   @InjectMocks private TicketService ticketService;
 
-  User user;
-  Ticket testTicket;
+  private User user;
+  private Ticket testTicket;
 
   @BeforeEach
   void init() {
@@ -38,14 +38,15 @@ class TicketServiceTest {
 
   @Test
   void saveTicket_withTicket() {
-    testTicket.setId(UUID.randomUUID());
+    UUID expectedId = UUID.randomUUID();
+    testTicket.setId(expectedId);
 
     when(ticketRepository.save(testTicket)).thenReturn(testTicket);
 
-    Ticket result = ticketService.saveTicket(testTicket);
+    Ticket actualTicket = ticketService.saveTicket(testTicket);
 
-    assertNotNull(result);
-    assertNotNull(testTicket.getId());
+    assertNotNull(actualTicket);
+    assertEquals(expectedId, actualTicket.getId());
     verify(ticketRepository, times(1)).save(testTicket);
   }
 
@@ -70,14 +71,14 @@ class TicketServiceTest {
 
   @Test
   void getTicketById_withTicket() {
-    UUID id = UUID.randomUUID();
+    UUID expectedId = UUID.randomUUID();
 
-    when(ticketRepository.findById(id)).thenReturn(Optional.ofNullable(testTicket));
+    when(ticketRepository.findById(expectedId)).thenReturn(Optional.ofNullable(testTicket));
 
-    Ticket actualResult = ticketService.getTicket(id);
+    Ticket actualResult = ticketService.getTicket(expectedId);
 
     assertEquals(testTicket, actualResult);
-    verify(ticketRepository, times(1)).findById(id);
+    verify(ticketRepository, times(1)).findById(expectedId);
   }
 
   @Test
@@ -111,9 +112,9 @@ class TicketServiceTest {
 
     when(ticketRepository.findByUserId(user.getId())).thenReturn(expectedTickets);
 
-    List<Ticket> result = ticketService.getTicketByUserId(user.getId());
+    List<Ticket> actualResultTicketList = ticketService.getTicketByUserId(user.getId());
 
-    assertEquals(expectedTickets, result, "The tickets should match the expected list");
+    assertEquals(expectedTickets, actualResultTicketList, "The tickets should match the expected list");
     verify(ticketRepository, times(1)).findByUserId(user.getId());
   }
 
@@ -123,9 +124,9 @@ class TicketServiceTest {
 
     when(ticketRepository.findByUserId(user.getId())).thenReturn(new ArrayList<>());
 
-    List<Ticket> result = ticketService.getTicketByUserId(user.getId());
+    List<Ticket> actualResultTicketList = ticketService.getTicketByUserId(user.getId());
 
-    assertTrue(result.isEmpty(), "Expected an empty list when no tickets are found");
+    assertTrue(actualResultTicketList.isEmpty(), "Expected an empty list when no tickets are found");
     verify(ticketRepository, times(1)).findByUserId(user.getId());
   }
 
@@ -150,9 +151,9 @@ class TicketServiceTest {
     when(ticketRepository.updateTicketTypeById(testTicket.getId(), testTicket.getTicketType()))
         .thenReturn(1);
 
-    int result = ticketService.updateTicketType(testTicket.getId(), testTicket.getTicketType());
+    int actualResult = ticketService.updateTicketType(testTicket.getId(), testTicket.getTicketType());
 
-    assertEquals(1, result, "The tickets should match the expected list");
+    assertEquals(1, actualResult, "The tickets should match the expected list");
     verify(ticketRepository, times(1))
         .updateTicketTypeById(testTicket.getId(), testTicket.getTicketType());
   }
@@ -181,9 +182,9 @@ class TicketServiceTest {
     when(ticketRepository.updateTicketTypeById(testTicket.getId(), testTicket.getTicketType()))
         .thenReturn(0);
 
-    int result = ticketService.updateTicketType(testTicket.getId(), testTicket.getTicketType());
+    int actualResult = ticketService.updateTicketType(testTicket.getId(), testTicket.getTicketType());
 
-    assertEquals(0, result, "Expected not updated ticket type when no tickets are found");
+    assertEquals(0, actualResult, "Expected not updated ticket type when no tickets are found");
     verify(ticketRepository, times(1))
         .updateTicketTypeById(testTicket.getId(), testTicket.getTicketType());
   }
