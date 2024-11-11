@@ -1,41 +1,43 @@
 package org.example.service;
 
 import jakarta.transaction.Transactional;
-import org.example.repository.TicketRepository;
-import org.example.model.TicketType;
-import org.example.model.ticket.Ticket;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.UUID;
+import org.example.model.TicketType;
+import org.example.model.ticket.Ticket;
+import org.example.repository.TicketRepository;
+import org.springframework.stereotype.Service;
 
 @Service
 public class TicketService {
-    @Autowired
-    private TicketRepository ticketRepository;
+  private TicketRepository ticketRepository;
 
-    @Transactional
-    public Ticket saveTicket(Ticket ticket) {
-        return ticketRepository.save(ticket);
-    }
+  public TicketService(TicketRepository ticketRepository) {
+    this.ticketRepository = ticketRepository;
+  }
 
-    public Ticket getTicket(UUID id) {
-        return ticketRepository.findById(id)
-         .orElseThrow(() -> new IllegalArgumentException("Ticket not found with id: " + id));
-    }
+  @Transactional
+  public Ticket saveTicket(Ticket ticket) {
+    return ticketRepository.save(ticket);
+  }
 
-    public List<Ticket> getTicketByUserId(UUID userId) {
-        return ticketRepository.findByUserId(userId);
-    }
+  public Ticket getTicket(UUID id) {
+    return ticketRepository
+        .findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("Ticket not found with id: " + id));
+  }
 
-    @Transactional
-    public void updateTicketType(UUID id, TicketType ticketType) {
-        ticketRepository.updateTicketTypeById(ticketType, id);
-    }
+  public List<Ticket> getTicketByUserId(UUID userId) {
+    return ticketRepository.findByUserId(userId);
+  }
 
-    @Transactional
-    public void deleteTicket(UUID id) {
-        ticketRepository.deleteById(id);
-    }
+  @Transactional
+  public int updateTicketType(UUID id, TicketType ticketType) {
+    return ticketRepository.updateTicketTypeById(id, ticketType);
+  }
+
+  @Transactional
+  public void deleteTicket(UUID id) {
+    ticketRepository.deleteById(id);
+  }
 }

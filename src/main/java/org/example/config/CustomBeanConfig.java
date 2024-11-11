@@ -7,9 +7,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CustomBeanConfig {
 
-    @Bean
-    @ConditionalOnProperty(name = "app.feature.enabled",havingValue = "true")
-    public String thisIsMyFirstConditionalBean() {
-        return "This bean is available because app.feature.enabled is true!";
-    }
+  @Bean
+  @ConditionalOnProperty(name = "app.feature.enabled", havingValue = "true")
+  public String thisIsMyFirstConditionalBean() {
+    return "This bean is available because app.feature.enabled is true!";
+  }
 }
